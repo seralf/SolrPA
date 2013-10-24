@@ -1,4 +1,13 @@
 
+## TODO
+
+- modificare la configurazione per prendere in automatico i nomi dalla prima riga del file CSV
+
+- aggiunta altre tipologie di files e parsing via javascript
+
+- eventuale aggiunta di connettori ad hoc
+
+
 ##ISTRUZIONI:
 
 1) download della distribuzione standard di Solr, estrazione in una directory "solr" dentro SolrPA
@@ -18,7 +27,7 @@ http://localhost:8983/solr/#/PA/dataimport//dih
 
 http://localhost:8983/solr/PA/select?q=*%3A*&rows=100000&fl=DATA_INIZIO+DATA_FINE+REGIONE+SETTORE+IMPORTO_EROGATO+IMPORTO_PREVISTO&wt=csv&indent=true
 
-# ESEMPIO 2: faceted search per regione
+### ESEMPIO 2: faceted search per regione
 
 http://localhost:8983/solr/PA/select?q=*:*&rows=0&fl=REGIONE+IMPORTO_EROGATO+IMPORTO_PREVISTO+SETTORE&facet=true&facet.mincount=3&facet.field=REGIONE&wt=json&indent=true
 
