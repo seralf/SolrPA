@@ -1,0 +1,81 @@
+<dataConfig>
+
+<script><![CDATA[
+function console(row) {
+	java.lang.System.out.println("\n\n##### READING FILE: \n");
+	java.lang.System.out.println("\n\n"+row.toString()+"\n\n");
+	return row;
+}
+var names = ""
+var id = 1
+
+function generateID(row) {
+	row.put('id', (id ++).toFixed());
+	//id = id +1;
+	java.lang.System.out.println("\nID: "+row.get('id')+"\n");
+	return row;
+};
+
+function splitColumns(row) {
+	//java.lang.System.out.println("-->ID: "+id);
+	if(id == 1) {
+		names = row.get('rawLine');
+	}else {
+		var values = row.get('rawLine');
+		java.lang.System.out.println("NAMES: "+ names + " : " + names.size());
+		java.lang.System.out.println("VALUES: "+ values + " : " + values.size());
+		
+		if(names.size()!=values.size())
+			java.lang.System.out.println("\n\n\n\n----------------\nWRONG ROW\n"+ row+ "\n----------------\n\n\n\n");
+		
+		for(i=0;i<names.size() && i<values.size();i++){
+			row.put(names.get(i), values.get(i));
+		}
+	}
+	id++;
+	java.lang.System.out.println("ROW: "+row+"\n\n");
+	return row;
+}
+
+]]></script>
+
+	<dataSource name="fds" type="FileDataSource" encoding="UTF-8" />
+	<document>
+		
+		<entity name="files" 
+			dataSource="null" 
+			rootEntity="false" 
+			processor="FileListEntityProcessor" 
+			baseDir="${solr.solr.home}/../CSV"
+			fileName=".*\.csv" 
+			onError="skip" 
+			newerThan="${dataimporter.last_index_time}"    
+			transformer="script:console" 
+			recursive="true">
+		
+		
+		<entity name="csv_file" 
+			processor="LineEntityProcessor" 
+			url="${files.fileAbsolutePath}" 
+			dataSource="fds" 
+			transformer="RegexTransformer,script:generateID,script:splitColumns">
+			
+			<field column="rawLine" 
+				regex="^(.*);(.*);(.*)$" 
+				groupNames="ID,nome,citta" />
+			<field column="ID" name="id"  />
+			
+			<field column="rawLine" splitBy="\t" />
+			
+			
+			<!--
+			REGIONE	SIGLA_PROVINCIA	COMPARTO	SETTORE	PA_CONFERENTE	ESECUTORE	TIPO_ESECUTORE	DATA_INIZIO	DATA_FINE	ATTIVITA_ECONOMICA	IMPORTO_PREVISTO	IMPORTO_EROGATO	DESCRIZIONE_INCARICO
+SICILIA	AG	ENTI PUBBLICI NON ECONOMICI	ORDINE - COLLEGIO	ORDINE DEI MEDICI VETERINARI DELLA PROV.DI AGRIGENTO	Zambito, Alfonso	P	2011-07-01	2011-12-31	Altre attività professionali nca	1900	1900	CONSULENZA AMMINISTRATIVA E CONTABILE
+			-->
+			
+		</entity>
+				
+		</entity>
+	</document>
+<!-- baseDir="${solr.solr.home}/../CSV" -->
+</dataConfig>

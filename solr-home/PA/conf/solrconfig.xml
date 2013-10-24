@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<config>
+
+	<luceneMatchVersion>LUCENE_45</luceneMatchVersion>
+
+	<directoryFactory name="DirectoryFactory" class="solr.MMapDirectoryFactory" />
+
+	<codecFactory name="CodecFactory" class="solr.SchemaCodecFactory" />
+
+	<requestHandler name="standard" class="solr.StandardRequestHandler" default="true" />
+
+<!--
+<lib dir="${solr.core.instanceDir}/../../solr-4.5.0/dist/lib/" regex="solr-dataimporthandler-.*\.jar" />
+<lib dir="../solr-4.5.0/dist/lib/" regex="solr-dataimporthandler-.*\.jar" />
+<lib dir="../solr-4.5.0/dist/lib/" regex=".*\.jar" />
+-->
+
+<lib dir="${solr.core.instanceDir}/../../solr-4.5.0/dist/lib/" regex=".*\.jar" />	
+	
+	<requestHandler name="/admin/" class="org.apache.solr.handler.admin.AdminHandlers" />
+	<admin>
+		<defaultQuery>*:*</defaultQuery>
+	</admin>
+
+	<requestHandler name="/update" class="solr.UpdateRequestHandler" />
+
+	<requestHandler name="/analysis/field" class="solr.FieldAnalysisRequestHandler" />
+
+	<requestHandler name="/dih" class="org.apache.solr.handler.dataimport.DataImportHandler">
+		<lst name="defaults">
+			<str name="update.chain">data-extraction</str><!-- RIVEDERE -->
+			<str name="config">DIH_csv.xml</str>
+		</lst>
+	</requestHandler>
+
+	<updateRequestProcessorChain name="data-extraction">
+		<processor class="solr.StatelessScriptUpdateProcessorFactory">
+			<!-- <str name="script">normalize_entities.js</str> -->
+			<str name="script">extract_fields.js</str>
+		</processor>
+		<processor class="solr.LogUpdateProcessorFactory" />
+		<processor class="solr.RunUpdateProcessorFactory" />
+	</updateRequestProcessorChain>
+
+	<updateHandler class="solr.DirectUpdateHandler2">
+		<updateLog>
+			<str name="dir">${solr.ulog.dir:}</str>
+		</updateLog>
+		<autoCommit>
+			<maxTime>100</maxTime>
+			<maxDoc>200</maxDoc>
+			<openSearcher>false</openSearcher>
+		</autoCommit>
+	</updateHandler>
+
+</config>
+

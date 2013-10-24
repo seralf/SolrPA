@@ -1,0 +1,9 @@
+ID;nome;citta
+1;paperino;paperopoli
+2;zio paperone;paperopoli
+3;pippo;topolinia
+4;qui;paperopoli
+5;quo;paperopoli
+6;qua;paperopoli
+7;topolino;topolinia
+8;pluto;topolinia
