@@ -44,3 +44,6 @@ http://localhost:8983/solr/PA/select?q=*:*&rows=0&fl=REGIONE+IMPORTO_EROGATO+IMP
 - *entities*: espandere entities dai nomi su wikipedia, geonames etc
 
 4) miglioramento campi per full-text search (stemming, sinonimi etc etc)
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/seralf/solrpa/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
